@@ -46,12 +46,12 @@ for (name in names(cbs.datasets)){
   path.csv <- file.path(getwd(),cbs.datasets[name],"data.csv")
   # bestanden inlezen, maakt dataframe met opgegeven naam
   assign(name, 
-         read_csv(file = path.csv, col_types = cols(.default = "c")) # alle kolommen als tekst laden, daarna bewerken
+         read_csv(file = path.csv, col_types = cols(.default = "c"), locale = readr::locale(encoding = "windows-1252")) # alle kolommen als tekst laden, daarna bewerken
          )
   # metadata inlezen, maakt dataframet met suffix meta
   path.csv <- file.path(getwd(),cbs.datasets[name],"DataProperties.csv")
   assign(paste(name,'meta',sep = '_'), 
-         read_csv(file = path.csv, col_types = cols(.default = "c")) # alle kolommen als tekst laden, daarna bewerken
+         read_csv(file = path.csv, col_types = cols(.default = "c"), locale = readr::locale(encoding = "windows-1252")) # alle kolommen als tekst laden, daarna bewerken
   )
   assign(name,
          get(name) %>% mutate_all(DataCleansing)) # spaties links en rechts verwijderen
@@ -66,7 +66,7 @@ Gebieden <- Gebieden %>% mutate_at(c('Inwonertal_48'), as.numeric)
 # namelijk in de loop van de tijd van naam of samenstelling wijzigen. Bijvoorbeeld door het bijbouwen van
 # een nieuwe wijk. 
 path.csv <- file.path(getwd(),cbs.datasets["Kerncijfers"],"WijkenEnBuurten.csv")
-GeoDetail <- read_csv(file = path.csv, col_types = cols(.default = "c"))
+GeoDetail <- read_csv(file = path.csv, col_types = cols(.default = "c"), locale = readr::locale(encoding = "windows-1252"))
 
 # CBS gebruikt de volgende geografische codes, hieronder de codes relevant binnen de dataset 
 # 'CBS Kerncijfers Wijken en Buurten' (kolom: DetailRegionCode)
