@@ -79,31 +79,34 @@ GeoDetail <- read_csv(file = path.csv, col_types = cols(.default = "c"), locale 
 # daarna wijknummer (##), bijvoorbeeld 07 voor Weidevenne
 # daarna buurtnummer (##), bijvoorbeeld 02 voor Azie
 
-pattern.wijk.1 <- "^Wijk [0123456789][0123456789]|^Wijk [0123456789]"
-# Wijk02 Kunrade, 	Wijk10 Fokkesteeg, 	Wijk16 Huygenhoek
-pattern.wijk.2 <- "^Wijk[0123456789][0123456789]"
+pattern.wijknaam.1 <- "^Wijk [0123456789] "
+pattern.wijknaam.2 <- "^Wijk [0123456789][0123456789] "
+pattern.wijknaam.3 <- "^Wijk[0123456789][0123456789] " # Wijk02 Kunrade, 	Wijk10 Fokkesteeg, 	Wijk16 Huygenhoek
 
-
-
-GeoDetail$DetailRegionCode[GeoDetail$Title=="Nederland"] <- '	NL00'
+GeoDetail$DetailRegionCode[GeoDetail$Key=="NL00"] <- 'NL00'
 
 GeoDetail <- GeoDetail %>% 
   mutate(
-    WijkCode   = if_else(str_sub(GeoDetail$DetailRegionCode,1,2)=='BU',
-                         paste('WK',str_sub(GeoDetail$DetailRegionCode,3,8), sep = ""),
-                         ""),
-    Naam   = if_else(str_detect(Title, pattern.wijk.1)==TRUE, 
-                     str_sub(Title,9,100), 
-                     Title),
-    Naam   = if_else(str_detect(Title, pattern.wijk.2)==TRUE, 
-                     str_sub(Title,8,100), 
-                     Title)
-    )
+    RegioType = case_when(str_sub(GeoDetail$DetailRegionCode,1,2)=='BU' ~ "Buurt",
+                          str_sub(GeoDetail$DetailRegionCode,1,2)=='WK' ~ "Wijk",
+                          str_sub(GeoDetail$DetailRegionCode,1,2)=='GM' ~ "Gemeente",
+                          str_sub(GeoDetail$DetailRegionCode,1,4)=='NL00' ~ "Nederland",
+                          TRUE ~ "Anders"),
+    RegioNaam = case_when(str_detect(Title, pattern.wijknaam.1)==TRUE ~ str_sub(Title,7,100),
+                          str_detect(Title, pattern.wijknaam.2)==TRUE ~ str_sub(Title,8,100),
+                          str_detect(Title, pattern.wijknaam.3)==TRUE ~ str_sub(Title,7,100),
+                          TRUE ~ Title),
+    WijkCode  = if_else(str_sub(GeoDetail$DetailRegionCode,1,2)=='BU',
+                        paste('WK',str_sub(GeoDetail$DetailRegionCode,3,8), sep = ""),
+                        "")
+
+  )
+
 
 GeoDetail <- GeoDetail %>%   
-  select(DetailRegionCode, Municipality, WijkCode, Title, Naam) %>%
-  left_join(select(GeoDetail, DetailRegionCode, GemeenteNaam = Naam),by=c("Municipality" = "DetailRegionCode")) %>%
-  left_join(select(GeoDetail, DetailRegionCode, WijkNaam = Naam)    ,by=c("WijkCode" = "DetailRegionCode"))
+  select(DetailRegionCode, RegioType, GemeenteCode = Municipality, WijkCode, RegioNaam) %>%
+  left_join(select(GeoDetail, DetailRegionCode, GemeenteNaam = RegioNaam),by=c("GemeenteCode" = "DetailRegionCode")) %>%
+  left_join(select(GeoDetail, DetailRegionCode, WijkNaam = RegioNaam)    ,by=c("WijkCode" = "DetailRegionCode"))
 
 View(GeoDetail)
 
