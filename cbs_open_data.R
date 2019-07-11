@@ -102,7 +102,6 @@ GeoDetail <- GeoDetail %>%
 
   )
 
-
 GeoDetail <- GeoDetail %>%   
   select(DetailRegionCode, RegioType, GemeenteCode = Municipality, WijkCode, RegioNaam) %>%
   left_join(select(GeoDetail, DetailRegionCode, GemeenteNaam = RegioNaam),by=c("GemeenteCode" = "DetailRegionCode")) %>%
@@ -127,7 +126,3 @@ View(DataAnalyse)
 # Stap 10, datavisualisatie met ggplot2
 
 names(Kerncijfers)
-
-
-
-
