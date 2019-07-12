@@ -20,7 +20,9 @@ require('tidyverse')
 cbs.datasets <- list(
   "Gebieden" = "83553NED", # Gebieden in Nederland 2017, bijvoorbeeld 'Zaanstreek/Waterland'
   "Woonplaatsen" = "83689NED", # Woonplaatsen in Nederland 2017
-  "Kerncijfers" = "83765NED" # Kerncijfers wijken en buurten 2017
+  "Kerncijfers" = "83765NED", # Kerncijfers wijken en buurten 2017
+  "JeugdzorgNatura" = "83782NED", #  Aantal jongeren dat in 2017 jeugdzorg in natura (jeugdhulp in natura, jeugdbescherming en/of jeugdreclassering) heeft gekregen 
+  "GebruikSociaalDomein" = "83817NED"  # Gebruik voorzieningen sociaal domein; aantal voorzieningen, wijken, 2017
 ) 
 # Stap 2 downloaden
 # downloaden kan even duren
