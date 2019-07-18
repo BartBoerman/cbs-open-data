@@ -29,7 +29,7 @@ cbs.datasets <- list(
 for (item in cbs.datasets){
   cbs_id <- item
   path <- file.path(getwd(),cbs_id)
-  cbs_download_table(id=cbs_id, dir = path, cache = FALSE, verbose = FALSE)
+  cbs_download_table(id=cbs_id, dir = path, typed = TRUE, cache = TRUE, verbose = FALSE)
   print(item)
 }
 # Stap 4 data opschonen
