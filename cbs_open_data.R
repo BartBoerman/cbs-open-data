@@ -15,8 +15,8 @@
 # Stap 1 wat?
 require('cbsodataR')
 require('tidyverse')
-#cbs_toc <- cbs_get_toc("Language" = "nl") #%>% filter(grepl('buurt|wijk|gemeente',ShortDescription) & grepl('2017',Period))
-#View(cbs_toc)
+Inhoudsopgave <- cbs_get_toc("Language" = "nl") %>% filter(grepl('buurt|wijk|gemeente',ShortDescription) & grepl('2017',Period))
+View(Inhoudsopgave)
 cbs.datasets <- list(
   "Gebieden" = "83553NED", # Gebieden in Nederland 2017, bijvoorbeeld 'Zaanstreek/Waterland'
   "Woonplaatsen" = "83689NED", # Woonplaatsen in Nederland 2017
